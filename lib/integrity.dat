@@ -1,0 +1,5 @@
+milesburton/DallasTemperature @ ^3.9.0
+paulstoffregen/OneWire @ ^2.3.7
+olikraus/U8g2 @ ^2.34.8
+mathworks/ThingSpeak @ ^2.0.0
+https://github.com/adafruit/Adafruit_VL53L0X.git#1.2.4
