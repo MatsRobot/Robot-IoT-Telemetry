@@ -12,7 +12,8 @@
 
     <style>
         :root {
-            --gh-green: #2ea44f;
+            --gh-green: #238636; /* Updated to GitHub Dark Green */
+            --gh-green-hover: #2ea44f;
             --gh-dark: #24292e;
             --gh-blue: #0366d6;
             --gh-border: #eaecef;
@@ -74,17 +75,61 @@
             border-radius: 4px;
         }
 
-        .btn { 
+        /* --- UPDATED BUTTON STYLES --- */
+        .btn-download { 
             background-color: var(--gh-green); 
             color: white; 
-            padding: 12px 24px; 
+            padding: 12px 28px; 
             text-decoration: none; 
             border-radius: 6px; 
-            display: inline-block; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 18px; 
             font-weight: 600;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
+            border: 1px solid rgba(27, 31, 35, 0.15);
+            box-shadow: 0 1px 0 rgba(27, 31, 35, 0.1);
         }
-        .btn:hover { background-color: #2c974b; }
+
+        .btn-download:hover { 
+            background-color: var(--gh-green-hover); 
+        }
+
+        .btn-download:active {
+            transform: translateY(1px);
+        }
+
+        .btn-text-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers lines relative to each other */
+            line-height: 1.1;
+            text-align: center;
+        }
+
+        .btn-main {
+            font-size: 1.35rem;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .btn-sub-lines {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: 400;
+            opacity: 0.95;
+            letter-spacing: 0.2px;
+        }
+
+        .download-icon {
+            fill: currentColor;
+            flex-shrink: 0;
+        }
 
         .tech-table {
             width: 100%;
@@ -124,6 +169,7 @@
 
         @media (max-width: 768px) {
             .hero-section, .grid { flex-direction: column; }
+            .btn-download { width: 100%; justify-content: center; box-sizing: border-box; }
         }
     </style>
 </head>
@@ -137,8 +183,17 @@
                 <strong>Mission Critical:</strong> Originally developed for 24/7 environmental monitoring, this architecture now serves as the backbone for remote robot health monitoring and data logging.
             </div>
 
-            <a href="https://github.com/MatsRobot/Robot-IoT-Telemetry" class="btn">
-                Download Framework & Source Code on GitHub
+            <a href="https://github.com/MatsRobot/Robot-IoT-Telemetry" class="btn-download">
+                <svg class="download-icon" width="32" height="32" viewBox="0 0 24 24">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+                <div class="btn-text-container">
+                    <span class="btn-main">Downloads</span>
+                    <div class="btn-sub-lines">
+                        <span>Open-Source Build Instructions</span>
+                        <span>& Source Code at GitHub</span>
+                    </div>
+                </div>
             </a>
         </div>
 
@@ -174,8 +229,6 @@
     <h2>Operational Logic: The "PondGuard" Implementation</h2>
     <p>The system follows a synchronized four-step cycle to ensure reliable telemetry:</p>
     
-    
-
     <ol>
         <li><strong>Sensing:</strong> The hub polls the Laser ToF sensor and multi-point temperature probes.</li>
         <li><strong>Processing:</strong> The ESP8266 calculates deltas and formats the HTTP payload for transmission.</li>
