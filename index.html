@@ -12,7 +12,7 @@
 
     <style>
         :root {
-            --gh-green: #238636; /* Updated to GitHub Dark Green */
+            --gh-green: #238636;
             --gh-green-hover: #2ea44f;
             --gh-dark: #24292e;
             --gh-blue: #0366d6;
@@ -75,7 +75,7 @@
             border-radius: 4px;
         }
 
-        /* --- UPDATED BUTTON STYLES --- */
+        /* --- RESTORED FULL BUTTON STYLES --- */
         .btn-download { 
             background-color: var(--gh-green); 
             color: white; 
@@ -102,7 +102,7 @@
         .btn-text-container {
             display: flex;
             flex-direction: column;
-            align-items: center; /* Centers lines relative to each other */
+            align-items: center; 
             line-height: 1.1;
             text-align: center;
         }
@@ -178,9 +178,9 @@
     <div class="hero-section">
         <div class="hero-text">
             <h1>🤖 Robot IoT Telemetry: Cloud-Connected Robotics</h1>
-            <p>A robust IoT framework designed to bridge the gap between physical robotics and cloud-based analytics. This system captures, transmits, and visualizes real-time sensor data using the ThingSpeak API.</p>
+            <p>A robust IoT framework designed to bridge the gap between physical robotics and cloud-based analytics. This system captures, transmits, and visualizes real-time sensor data using the <strong>ESP8266-ThingSpeak REST API</strong>.</p>
             <div class="note">
-                <strong>Mission Critical:</strong> Originally developed for 24/7 environmental monitoring, this architecture now serves as the backbone for remote robot health monitoring and data logging.
+                <strong>Mission Critical:</strong> Originally developed for 24/7 environmental monitoring, this architecture now serves as the backbone for remote robot health monitoring and high-frequency data logging.
             </div>
 
             <a href="https://github.com/MatsRobot/Robot-IoT-Telemetry" class="btn-download">
@@ -206,10 +206,10 @@
     <h2>Technical Framework Features</h2>
     <p>This project utilizes an edge-to-cloud pipeline to ensure robot health and environmental data persistence:</p>
     <ul>
-        <li><strong>Cloud-Native Architecture:</strong> Direct integration with <strong>ThingSpeak</strong> for live graphing and historical data storage.</li>
-        <li><strong>Precision ToF Sensing:</strong> Uses VL53L0X Laser sensors for millimetre-accurate obstacle or level detection.</li>
-        <li><strong>Multi-Node Thermal Monitoring:</strong> Implements the 1-Wire protocol for daisy-chained DS18B20 temperature probes.</li>
-        <li><strong>Remote Alarming:</strong> Logic triggers (ThingSpeak React / IFTTT) for critical threshold notifications.</li>
+        <li><strong>Cloud-Native Architecture:</strong> Direct integration with <strong>ThingSpeak</strong> for live graphing and historical data storage using HTTP POST requests.</li>
+        <li><strong>Precision ToF Sensing:</strong> Uses VL53L0X Laser sensors which utilize photon travel time (Speed of Light) for millimetre-accurate detection regardless of surface color.</li>
+        <li><strong>Multi-Node Thermal Monitoring:</strong> Implements the 1-Wire protocol for daisy-chained DS18B20 temperature probes, allowing dozens of sensors on a single GPIO pin.</li>
+        <li><strong>Remote Alarming:</strong> Logic triggers (ThingSpeak React / IFTTT) for critical threshold notifications sent directly to mobile devices.</li>
     </ul>
 
     <h2>Hardware Specifications</h2>
@@ -219,27 +219,27 @@
         </thead>
         <tbody>
             <tr><td><strong>Microcontroller</strong></td><td>Heltec WiFi Kit 8 (ESP8266) @ 80MHz</td></tr>
-            <tr><td><strong>Primary Display</strong></td><td>Integrated 0.91-inch OLED for edge visualization</td></tr>
+            <tr><td><strong>Primary Display</strong></td><td>Integrated 0.91-inch OLED (SSD1306 I2C)</td></tr>
             <tr><td><strong>Distance Sensor</strong></td><td>VL53L0X Laser Time-of-Flight (ToF)</td></tr>
             <tr><td><strong>Temperature</strong></td><td>DS18B20 Waterproof probes (1-Wire Protocol)</td></tr>
-            <tr><td><strong>Connectivity</strong></td><td>ThingSpeak IoT REST API over WiFi</td></tr>
+            <tr><td><strong>Connectivity</strong></td><td>TCP/IP via IEEE 802.11 b/g/n WiFi</td></tr>
         </tbody>
     </table>
 
-    <h2>Operational Logic: The "PondGuard" Implementation</h2>
-    <p>The system follows a synchronized four-step cycle to ensure reliable telemetry:</p>
+    <h2>Operational Logic: Under the Hood</h2>
+    <p>To maintain a reliable cloud link without freezing the robot's local movements, the system follows a non-blocking asynchronous cycle:</p>
     
     <ol>
-        <li><strong>Sensing:</strong> The hub polls the Laser ToF sensor and multi-point temperature probes.</li>
-        <li><strong>Processing:</strong> The ESP8266 calculates deltas and formats the HTTP payload for transmission.</li>
-        <li><strong>Cloud Sync:</strong> Data is pushed via WiFi to the ThingSpeak REST API.</li>
-        <li><strong>Action:</strong> If parameters exceed safe limits (e.g., low battery or low level), an automated alarm is triggered.</li>
+        <li><strong>Sensing:</strong> The hub polls the Laser ToF sensor and multi-point temperature probes using <code>millis()</code> timing to avoid code pauses.</li>
+        <li><strong>Data Formatting:</strong> The ESP8266 creates a URL-encoded string containing the API Key and field data.</li>
+        <li><strong>Cloud Handshake:</strong> A connection is opened to <code>api.thingspeak.com</code> on Port 80, transmitting the telemetry payload.</li>
+        <li><strong>Action:</strong> ThingSpeak analyzes the data; if battery levels or distances cross the "Danger" threshold, it triggers an external webhook.</li>
     </ol>
 
     <div class="grid">
         <div>
             <h3>Autonomous Health Monitoring</h3>
-            <p>Ideal for Battery Management Systems (BMS), logging cell temperatures and voltages remotely to prevent hardware failure.</p>
+            <p>Ideal for Battery Management Systems (BMS), logging cell temperatures and voltages remotely to prevent hardware failure through predictive analytics.</p>
         </div>
         <div>
             <h3>Navigational Logging</h3>
@@ -254,4 +254,3 @@
 
 </body>
 </html>
-
